@@ -1,6 +1,9 @@
 require("./config/config");
 
 const express = require("express");
+const mongoose = require("mongoose");
+const { urlDB } = require("./config/config");
+
 const app = express();
 
 const bodyParser = require("body-parser");
@@ -10,38 +13,17 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-app.get("/", function(req, res) {
-  res.json("Hello World");
-});
+app.use(require("./routes/usuario"));
 
-app.get("/usuario/:id", function(req, res) {
-  let id = req.params.id;
-
-  res.json(id);
-});
-
-app.post("/usuario", function(req, res) {
-  let body = req.body;
-
-  if (body.name === undefined) {
-    res.status(400).json({
-      ok: false,
-      mensaje: "Es necesario un nombre"
-    });
-  } else {
-    res.json({
-      body
-    });
+mongoose.connect(
+  process.env.NODE_ENV,
+  { useNewUrlParser: true, useCreateIndex: true },
+  (err, res) => {
+    if (err) throw err;
+    console.log("Conectado a Mongo");
+    console.log(process.env.NODE_ENV);
   }
-});
-
-app.put("/usuario", function(req, res) {
-  res.json("put usuario");
-});
-
-app.delete("/usuario", function(req, res) {
-  res.json("delete usuario");
-});
+);
 
 app.listen(process.env.PORT, () => {
   console.log("Escuchando en el puerto 3000");
