@@ -41,13 +41,13 @@ app.get("/usuario", function(req, res) {
           err
         });
       }
-      Usuario.count({ nombre: "Silvio" }, (err, conteo) => {
+      /* Usuario.count({ nombre: "Silvio" }, (err, conteo) => {
         res.json({
           ok: true,
           cuantos: conteo,
           usuarios
         });
-      });
+      }); */
     });
 });
 
