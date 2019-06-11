@@ -20,7 +20,7 @@ if (process.env.NODE_ENV === "dev") {
   urlDB = "mongodb://localhost:27017/cafe";
 } else {
   urlDB =
-    "mongodb+srv://strider:<password>@cluster0-a0t0t.mongodb.net/tester?retryWrites=true&w=majority";
+    "mongodb+srv://strider:motherfucker@cluster0-a0t0t.mongodb.net/tester?retryWrites=true&w=majority";
 }
 
 process.env.NODE_ENV = urlDB;
