@@ -4,6 +4,10 @@ const bcrypt = require("bcrypt");
 const _ = require("underscore");
 const Usuario = require("../models/usuario");
 
+app.get("/", function(req, res) {
+  res.json("Hello World");
+});
+
 app.get("/usuarios/:id", function(req, res) {
   let id = req.params.id;
   let body = req.body;
