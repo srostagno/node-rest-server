@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+const jwt = require("jsonwebtoken");
+const { tokenAuth, verifyAdminRole } = require("../middlewares/auth");
 const bcrypt = require("bcrypt");
 const _ = require("underscore");
 const Usuario = require("../models/usuario");
@@ -8,7 +10,7 @@ app.get("/", function(req, res) {
   res.json("Hello World");
 });
 
-app.get("/usuarios/:id", function(req, res) {
+app.get("/usuarios/:id", [tokenAuth, verifyAdminRole], function(req, res) {
   let id = req.params.id;
   let body = req.body;
 
@@ -26,7 +28,7 @@ app.get("/usuarios/:id", function(req, res) {
   });
 });
 
-app.get("/usuario", function(req, res) {
+app.get("/usuario", [tokenAuth, verifyAdminRole], (req, res) => {
   let desde = req.query.desde || 0;
   desde = Number(desde);
   let limite = req.query.limite || 5;
@@ -48,13 +50,13 @@ app.get("/usuario", function(req, res) {
     });
 });
 
-app.post("/usuario", function(req, res) {
+app.post("/usuario", [tokenAuth, verifyAdminRole], function(req, res) {
   let body = req.body;
 
   let usuario = new Usuario({
     nombre: body.nombre,
     email: body.email,
-    password: body.password,
+    password: bcrypt.hashSync(body.password, 10),
     role: body.role
   });
 
@@ -73,7 +75,7 @@ app.post("/usuario", function(req, res) {
   });
 });
 
-app.put("/usuario/:id", function(req, res) {
+app.put("/usuario/:id", [tokenAuth, verifyAdminRole], function(req, res) {
   let id = req.params.id;
   let body = _.pick(req.body, ["nombre", "email", "role", "img", "estado"]);
 
@@ -96,7 +98,7 @@ app.put("/usuario/:id", function(req, res) {
   );
 });
 
-app.delete("/usuario/:id", function(req, res) {
+app.delete("/usuario/:id", [tokenAuth, verifyAdminRole], function(req, res) {
   let id = req.params.id;
 
   let cambiarEstado = {
