@@ -50,7 +50,7 @@ app.get("/usuario", [tokenAuth, verifyAdminRole], (req, res) => {
     });
 });
 
-app.post("/usuario", function(req, res) {
+app.post("/usuario", [tokenAuth, verifyAdminRole], function(req, res) {
   let body = req.body;
 
   let usuario = new Usuario({
