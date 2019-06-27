@@ -79,6 +79,8 @@ app.put("/usuario/:id", [tokenAuth, verifyAdminRole], function(req, res) {
   let id = req.params.id;
   let body = _.pick(req.body, ["nombre", "email", "role", "img", "estado"]);
 
+  body.password = bcrypt.hashSync(req.body.password, 10);
+
   Usuario.findByIdAndUpdate(
     id,
     body,
